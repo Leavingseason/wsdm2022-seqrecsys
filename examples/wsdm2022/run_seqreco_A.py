@@ -37,7 +37,8 @@ BATCH_SIZE = 400
 RANDOM_SEED = SEED  # Set None for non-deterministic result
 
 # data_path = os.path.join("tests", "resources", "deeprec", "slirec")
-data_path = '/home/jialia/wsdm/seq_datasets/A_full_v4_max200_min1000_seq10_neg9'
+# data_path = '/home/jialia/wsdm/seq_datasets/A_full_v4_max200_min1000_seq10_neg9'
+data_path = sys.argv[1]
 print(os.path.abspath(data_path))  ## the path where I enter the cmd
 
 model_path = os.path.join(data_path, "model")
@@ -73,10 +74,10 @@ input_files = [reviews_file, meta_file, train_file, valid_file, test_file, user_
 
 
 # if not os.path.exists(user_vocab):
-#     _create_vocab(
-#         [train_file, valid_file],
-#         user_vocab, item_vocab, cate_vocab
-#     )
+_create_vocab(
+    [train_file, valid_file],
+    user_vocab, item_vocab, cate_vocab
+)
 
 
 # hparams = prepare_hparams(yaml_file, 
@@ -115,7 +116,7 @@ hparams = prepare_hparams(yaml_file,
                           train_num_ngs=train_num_ngs, # provides the number of negative instances for each positive instance for loss computation.
                           loss='log_loss', #'log_loss', 'softmax'
                           max_seq_length=10,
-                          cont_feat_len=78, ##85,
+                          cont_feat_len=85, ##78 or 85,
                           use_cont_feat=True,
                           use_useritem_type=0,
                           init_item_emb=False

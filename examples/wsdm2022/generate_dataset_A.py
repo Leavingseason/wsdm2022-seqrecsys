@@ -4,6 +4,7 @@ import random
 from unicodedata import normalize 
 from tqdm import tqdm
 import numpy as np
+import sys
 
 def load_user_order_history(infile):
     user2history = {}
@@ -160,6 +161,7 @@ def generate_training_set(user2history, item_set, edge_type2freq, max_num_per_us
     item_list = list(item_set)
     user_list = list(user2history.keys())
     random.shuffle(user_list)
+    # user_list = user_list[:100]
     valid_user_cnt = 0 
     instance_type2freq = defaultdict(int)
     vip_cnt = 10
@@ -209,12 +211,20 @@ def generate_training_set(user2history, item_set, edge_type2freq, max_num_per_us
 
 
 if __name__ == '__main__':
-    history_file = '/home/jialia/wsdm/edges_train_A.csv'
-    outpath = '/home/jialia/wsdm/seq_datasets/A_v4_max200_min1000_seq10_neg9'
-    seq_len = 10
-    max_per_user = 200
+    # raw_data_path = '/home/jialia/wsdm' 
+    # outpath = '/home/jialia/wsdm/seq_datasets/A_demo'
+
+    raw_data_path = sys.argv[1]
+    outpath = sys.argv[2]
+
+    history_file = os.path.join(raw_data_path, 'edges_train_A.csv')
+    
+    ### set to a smaller number for quick demo
+    ### if you want to reproduce a good result, do forget to replace the parameters with the commented numbers
+    seq_len = 2  ##10
+    max_per_user = 1 ## 200
     min_len = 1000
-    neg_num = 9
+    neg_num = 1 ## 9
     
     if not os.path.exists(outpath):
         os.mkdir(outpath)
@@ -222,19 +232,19 @@ if __name__ == '__main__':
 
     generate_training_set(user2history, item_set, edge_type2freq, max_per_user, min_len, neg_num, 0.8, outpath, allow_action=None, p_old_item=0.8, max_hist_len=seq_len, p_context_corrupt=0.4)
     generate_test_set(user2history,
-        '/home/jialia/wsdm/input_A_initial.csv',
+        os.path.join(raw_data_path, 'input_A_initial.csv'),
         os.path.join(outpath, 'valid.tsv'),
         True,
         max_hist_len=seq_len
     )
     generate_test_set(user2history,
-        '/home/jialia/wsdm/input_A.csv',
+        os.path.join(raw_data_path, 'input_A.csv'),
         os.path.join(outpath, 'inter_test.tsv'),
         False,
         max_hist_len=seq_len
     )
     generate_test_set(user2history,
-        '/home/jialia/wsdm/final/input_A.csv',
+        os.path.join(raw_data_path, 'final', 'input_A.csv'),
         os.path.join(outpath,'final_test.tsv'),
         False,
         max_hist_len=seq_len

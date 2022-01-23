@@ -1,10 +1,10 @@
 import os
 import numpy as np
 from sklearn import preprocessing
-import sys
 
-def job_append_cont_features(seq_path, feat_path, out_path):
-    # seq_path = '/home/jialia/wsdm/seq_datasets/A_v4_max200_min1000_seq10_neg9'
+
+def job_append_cont_features():
+    seq_path = '/home/jialia/wsdm/seq_datasets/A_demo'
     seq_files = [
         'train_instances.txt',
         'valid_instances.txt',
@@ -13,7 +13,7 @@ def job_append_cont_features(seq_path, feat_path, out_path):
         'final_test.tsv'
     ]
 
-    # feat_path = '/home/jialia/wsdm/seq_datasets/A_feature_v4_max200_min1000_seq10_neg9'
+    feat_path = '/home/jialia/wsdm/seq_datasets/A_demo'
     feat_files = [
         'my_train.csv',
         'my_valid.csv',
@@ -22,7 +22,7 @@ def job_append_cont_features(seq_path, feat_path, out_path):
         'final_test.csv'
     ]
 
-    # out_path = '/home/jialia/wsdm/seq_datasets/A_full_v4_max200_min1000_seq10_neg9' 
+    out_path = '/home/jialia/wsdm/seq_datasets/A_demo' 
 
     _process(
         seq_path, seq_files,
@@ -104,8 +104,6 @@ def _process(
     print('#. columns is {0}'.format(col_n))
 
 if __name__ == '__main__':
-    seq_path = sys.argv[1]
-    feat_path = sys.argv[2]
-    out_path = sys.argv[3]
-    job_append_cont_features(seq_path, feat_path, out_path)
- 
+    job_append_cont_features()
+
+    # job_append_cont_features_B()

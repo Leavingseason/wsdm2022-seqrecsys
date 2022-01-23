@@ -6,6 +6,7 @@ from tqdm import tqdm
 import numpy as np
 from datetime import datetime
 import time
+import sys
 
 def get_hour_and_weekday(timestamp):
     d = datetime.fromtimestamp(timestamp)
@@ -243,9 +244,14 @@ def hash_dict_keys(d):
     return res
 
 if __name__ == '__main__':
-    history_file = '/home/jialia/wsdm/edges_train_A.csv'
-    inpath = '/home/jialia/wsdm/seq_datasets/A_edge_300k_neg9_nocollide_merged'
-    outpath = '/home/jialia/wsdm/seq_datasets/A_feature_edge_300k_neg9_nocollide_merged' 
+    # history_file = '/home/jialia/wsdm/edges_train_A.csv'
+    # inpath = '/home/jialia/wsdm/seq_datasets/A_demo'
+    # outpath = '/home/jialia/wsdm/seq_datasets/A_demo_feature' 
+
+    history_file = sys.argv[1]
+    inpath = sys.argv[2]
+    outpath = sys.argv[3]
+
     if not os.path.exists(outpath):
         os.mkdir(outpath)
     user2history, item2history, edge_type2freq = load_user_order_history(history_file)

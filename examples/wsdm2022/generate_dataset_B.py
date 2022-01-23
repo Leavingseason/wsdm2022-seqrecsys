@@ -3,6 +3,7 @@ import os
 import random
 import math
 from tqdm import tqdm 
+import sys 
 
 def load_user_order_history(infile):
     user2history = {}
@@ -129,25 +130,37 @@ def generate_training_set(user2history, item_set, max_num_per_user, min_user_seq
 
 
 if __name__ == '__main__':
-    history_file = '/home/jialia/wsdm/edges_train_B.csv'
-    outpath = '/home/jialia/wsdm/seq_datasets/B_final'
+    # history_file = '/home/jialia/wsdm/edges_train_B.csv'
+    # outpath = '/home/jialia/wsdm/seq_datasets/B_final'
+
+    raw_data_path = sys.argv[1]
+    outpath = sys.argv[2]
+
+    
+    ### set to a smaller number for quick demo
+    ### if you want to reproduce a good result, do forget to replace the parameters with the commented numbers
+    max_num_per_user = 1 ## 10
+    neg_num = 1 ## 9
+
+    history_file = os.path.join(raw_data_path, 'edges_train_B.csv')
+
     if not os.path.exists(outpath):
         os.mkdir(outpath)
     user2history, item_set = load_user_order_history(history_file)
-    generate_training_set(user2history, item_set, 10, 5, 9, 0.8, outpath, allow_action=set([12]))
+    generate_training_set(user2history, item_set, max_num_per_user, 5, neg_num, 0.8, outpath, allow_action=set([12]))
     generate_test_set(user2history,
-        '/home/jialia/wsdm/input_B_initial.csv',
+        os.path.join(raw_data_path, 'input_B_initial.csv'),
         os.path.join(outpath, 'valid.tsv'),
         True
     )
     generate_test_set(user2history,
-        '/home/jialia/wsdm/input_B.csv',
+        os.path.join(raw_data_path, 'input_B.csv'),
         os.path.join(outpath, 'inter_test.tsv'),
         False
     )
 
     generate_test_set(user2history,
-        '/home/jialia/wsdm/final/input_B.csv',
+        os.path.join(raw_data_path, 'final', 'input_B.csv'),
         os.path.join(outpath, 'final_test.tsv'),
         False
     )

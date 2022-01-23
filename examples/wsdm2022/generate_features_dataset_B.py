@@ -6,6 +6,7 @@ from tqdm import tqdm
 import numpy as np
 from datetime import datetime
 import time
+import sys
 
 def get_hour_and_weekday(timestamp):
     d = datetime.fromtimestamp(timestamp)
@@ -206,37 +207,43 @@ def generate_features(infile, outfile, user2history, item2history, edge_types=[]
  
 
 if __name__ == '__main__':
-    history_file = '/home/jialia/wsdm/edges_train_B.csv'
-    outpath = '/home/jialia/wsdm/seq_datasets/B_feature' 
+    # history_file = '/home/jialia/wsdm/edges_train_B.csv'
+    # outpath = '/home/jialia/wsdm/seq_datasets/B_feature' 
+    history_file = sys.argv[1]
+    inpath = sys.argv[2]
+    outpath = sys.argv[3]
+
     if not os.path.exists(outpath):
         os.mkdir(outpath)
     user2history, item2history, edge_type2freq = load_user_order_history(history_file)
+
+     
     generate_features(
-        '/home/jialia/wsdm/seq_datasets/B/train_instances.txt',
+        os.path.join(inpath, 'train_instances.txt'),
         os.path.join(outpath, 'my_train.csv'),
         user2history,
         item2history
     )
     generate_features(
-        '/home/jialia/wsdm/seq_datasets/B/valid_instances.txt',
+        os.path.join(inpath, 'valid_instances.txt'),
         os.path.join(outpath, 'my_valid.csv'),
         user2history,
         item2history
     )
     generate_features(
-        '/home/jialia/wsdm/seq_datasets/B/valid.tsv',
+        os.path.join(inpath, 'valid.tsv'),
         os.path.join(outpath, 'valid.csv'),
         user2history,
         item2history
     )
     generate_features(
-        '/home/jialia/wsdm/seq_datasets/B/inter_test.tsv',
+        os.path.join(inpath, 'inter_test.tsv'),
         os.path.join(outpath, 'inter_test.csv'),
         user2history,
         item2history
     )
     generate_features(
-        '/home/jialia/wsdm/seq_datasets/B/final_test.tsv',
+        os.path.join(inpath, 'final_test.tsv'),
         os.path.join(outpath, 'final_test.csv'),
         user2history,
         item2history

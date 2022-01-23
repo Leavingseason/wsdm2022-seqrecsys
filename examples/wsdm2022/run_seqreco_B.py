@@ -33,7 +33,8 @@ yaml_file = '/home/jialia/wsdm/src/recommenders/examples/wsdm2022/sli_rec_B.yaml
 RANDOM_SEED = SEED  # Set None for non-deterministic result
 
 # data_path = os.path.join("tests", "resources", "deeprec", "slirec")
-data_path = '/home/jialia/wsdm/seq_datasets/B_full_feature_v2'
+# data_path = '/home/jialia/wsdm/seq_datasets/B_full_feature_v2'
+data_path = sys.argv[1]
 print(os.path.abspath(data_path))  ## the path where I enter the cmd
 
 # for test
@@ -54,10 +55,10 @@ valid_num_ngs = 9 # number of negative instances with a positive instance for va
 test_num_ngs = 9 # number of negative instances with a positive instance for testing
 
 
-# _create_vocab(
-#     [train_file, valid_file],
-#     user_vocab, item_vocab, cate_vocab
-# )
+_create_vocab(
+    [train_file, valid_file],
+    user_vocab, item_vocab, cate_vocab
+)
 
 
 ### NOTE:  
@@ -93,15 +94,15 @@ input_creator = SequentialIterator
 
 model = SeqModel(hparams, input_creator, seed=RANDOM_SEED)
 
-model.load_model(os.path.join(data_path, "model_20220118_20k_0.8923", 'step_20000'))
+# model.load_model(os.path.join(data_path, "model_20220118_20k_0.8923", 'step_20000'))
 
-# with Timer() as train_time:
-#     model = model.fit(train_file, valid_file, valid_num_ngs=9, eval_metric='auc')
-# print('Time cost for training is {0:.2f} mins'.format(train_time.interval/60.0))
+with Timer() as train_time:
+    model = model.fit(train_file, valid_file, valid_num_ngs=9, eval_metric='auc')
+print('Time cost for training is {0:.2f} mins'.format(train_time.interval/60.0))
 
-# ### model = model.fit(test_file, test_file, valid_num_ngs=9, eval_metric='auc') ##-- quick test
+### model = model.fit(test_file, test_file, valid_num_ngs=9, eval_metric='auc') ##-- quick test
 
-# model.load_model(os.path.join(data_path, "model", 'best_model'))
+model.load_model(os.path.join(data_path, "model", 'best_model'))
 
 
 res_syn = model.run_eval(test_file, num_ngs=9)
